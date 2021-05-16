@@ -3,15 +3,7 @@
 create function "operate" that takes operateor and two numbers and then calls one of the 4 math functions you will use and
 create.
 create buttons for each digit operateor equals sign and clear button
-onClick="reply_click(this)"
-onClick="reply_click(this)"
-onClick="reply_click(this)"
-onClick="reply_click(this)"
-onClick="reply_click(this)"
-onClick="reply_click(this)"
-onClick="reply_click(this)"
-onClick="reply_click(this)"
-onClick="reply_click(this)"
+
 -->
 
 <!DOCTYPE html>
@@ -28,7 +20,7 @@ onClick="reply_click(this)"
     border: 5px solid black;
     display: flex;
     font-size: 40px;
-    background-color: lightgray;
+    background-color: red;
     color: black;
    }
    #container {
@@ -37,7 +29,7 @@ onClick="reply_click(this)"
     border: 5px solid black;
     padding: 5px 5px;
     box-sizing: border-box;
-    background-color: lightgray;
+    background-color: black;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
@@ -47,21 +39,53 @@ onClick="reply_click(this)"
      height: 90px;
      font-size: 40px;
      color: black;
-     background-color: lightgray;
+     background-color: red;
      
      border: 1px solid black;
-     
-     
-   }
+     }
+
+    button:active {
+      background-color:red;
+      position:relative;
+      top: 5px;
+    }
+    button:hover {
+      background-color:yellow;
+    }
 
   #operator {
     color: red;
+    background-color: black;
+    border: 1px solid red;
+  }
+  #operator:active {
+    background-color: black;
+    position:relative;
+      top: 4px;
+  }
+  #operator:hover {
+    background-color: yellow;
   }
   #equals {
     color: red;
+    background-color: black;
+    border: 1px solid red;
+  }
+  #equals:active {
+    background-color: black;
+    position:relative;
+      top: 9px;
+  }
+  #equals:hover {
+    background-color: yellow;
   }
   #clear{
     color: red;
+    background-color: black;
+    border: 1px solid red;
+  }
+  #clear:hover {
+    background-color: yellow;
   }
 
 
@@ -75,7 +99,7 @@ onClick="reply_click(this)"
   <div id="display" > </div>
   <div id="container"> 
     <button id="number1" type="button" value=1>1</button>
-    <button id="number2" type="button" data-value="2" value=2 >2</button>
+    <button id="number2" type="button" value=2 >2</button>
     <button id="number3" type="button" value=3 >3</button>
     <button id="operator" type="button" value=+>+</button>
     <button id="number4" type="button" value=4 >4 </button>
@@ -103,6 +127,7 @@ onClick="reply_click(this)"
 //or any time a button is clicked its sent to a function that determines if its a number or operator then stores it
 //so what we can do is make a count=0 and increase it any time a number button is clicked(for now lets 
 //only worry about single digit numbers and two  different numbers)
+//add backspace button, add divide by zero message
 var count = 0;
 var num1=0;
 var num2=0;
@@ -113,20 +138,21 @@ const buttons= document.querySelectorAll("button");
 buttons.forEach((button) => {
   button.addEventListener("click", function() {buttonFunc(button.value);});
 });
-function buttonFunc (value) {
-if (value==="c") {
+
+function buttonFunc (value) { //function that organizes and evaluates buttons clicked
+if (value==="c") {            //if clear button is pressed erase display, reset count and therefore numbers
     display.textContent="";
     count=0;
     result=0;
     
   }
-else{
+else{                                 //if any button besides cancel then proceed
   if (count ===0) {
-    if(isNaN(Number(value))) {    
+    if(isNaN(Number(value))) {    //  if button pressed is = ignore and return
       if(value=== "=") {
         return;
       }
-      else {
+      else {                      // if its an operator then previous two numbers operated =num1,button clicked = operator
       num1=result;
       operator=value;
       display.textContent= operator;
@@ -134,32 +160,33 @@ else{
       return;
       }
     }
-    else {
+    else {                        //if its a number then num1=number increase count, display number
     value = Number(value);
     num1=value;
     console.log(num1);
-    //console.log((isNaN(num1)));
-    //console.log(typeof(num1));
     count++;
-   display.textContent=num1;
+    display.textContent=num1;
     return;
     }
   }
-  if (count===1) {
-    if (isNaN(Number(value))){
+  if (count===1) {            //count 1 is 2nd button clik
+    if (isNaN(Number(value))){    //if not a number then its the operator we want to use. operator=value, count+
     operator=value;
     console.log(operator);
     display.textContent=operator;
     count++;
     }
-    else {
+    else {                        //if its a number its the 2nd digit dont change count 
     num1=(num1*10)+(Number(value));
     display.textContent = num1;
     }
-    return;
+  return;
   }
-  if (count===2) {
-
+  if (count===2) {                    //3rd button click
+    if (isNaN(Number(value))) {       // if its not a number ignore it
+      return;
+    }
+    else {                             // if its number then  num2=value increase count
     value = Number(value);
     num2 = value;
     console.log(num2);
@@ -168,30 +195,54 @@ else{
     display.textContent=num2;
     count++;
     return;
-    
+    }
   }
-  if (count===3) {
-   // if (isNaN(Number(value))) {
-   // var result =  operate(operator, num1, num2);
-   if (!isNaN((Number(value)))) {
+  if (count===3) {                    //4th button click
+    if (!isNaN((Number(value)))) {      //if its a number its the next digit of num2 keep count
       num2=(num2*10)+(Number(value));
       display.textContent=num2;
       return;
     }
-  if(value === "=") {
+    if(value === "=") {                 //if equals clicked
+      
+        if (operator==="/"&&num2===0) { //if equals clicked but divides by zero send error message reset everything
+            alert("This calculation could cause the Universe to self-destruct! Try again");
+            display.textContent = "";
+            count=0;
+            num1=0;
+            num2=0;
+            result=0;
+            return;
+            
+           //alert("This calculation could collapse the Universe! Please try again");
+          }
+          else {               //if its equals call operate function with three parameters and set to result, display result, reset count
         result =  operate(operator, num1, num2);
         console.log(result);
         display.textContent=num1.toString()+" "+operator+" "+num2.toString()+""+value+" "+result;
         count=0;
         return;
+          }
       }
-   if (value === "+"||"-"||"*"||"/"){
-         result =  operate(operator, num1, num2);
-          display.textContent=result;
-          num1=result;
-          operator=value;
-          count=2;
-          return;
+    if (value === "+"||"-"||"*"||"/"){      //if its another operator
+          result =  operate(operator, num1, num2);   //still operate on num1,num2,operator set to result for now
+          
+          if (!isFinite(result)) {       //if result isn't finite send error alert and reset all numbers and display
+            alert("This calculation could collapse the Universe! Please try again");
+            display.textContent = " ";
+            count=0;
+            num1=0;
+            num2=0;
+            return;
+           
+          }
+          else {                //if its finite display result and log buttonclicked as operator and make num1=result, and count=2(go to third click)
+            display.textContent=result;
+            num1=result;
+            operator=value;
+            count=2;
+            return;
+          }
       }
   
     
@@ -205,17 +256,8 @@ else{
 
 
 
-  
-
-//function reply_click(clicked_object)
-//{
- //    var num=clicked_object.getAttribute('value');
- //    console.log(num);
-     
-//}
-
 function operate(operator,num1,num2){
-if (operator==="+"){
+      if (operator==="+"){
         return add(num1,num2);
       }
       if (operator==="-"){
@@ -225,10 +267,18 @@ if (operator==="+"){
         return multiply(num1,num2);
       }
       if (operator==="/"){
+       // if (num2===0) {
+         // document.querySelector("#clear").click();
+         //display.textContent="";
+         // alert("This calculation could cause the Universe to destruct! Please try again");
+         // return 0;
+        
+        
         return divide(num1,num2);
+        }
       }
 
-}
+
 function add (num1, num2) {
  return num1+num2;
 
