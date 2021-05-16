@@ -1,0 +1,232 @@
+
+<!--create calculator that adds subtracts multiplies and divides. It has buttons and a display. use html css JavaScript
+create function "operate" that takes operateor and two numbers and then calls one of the 4 math functions you will use and
+create.
+create buttons for each digit operateor equals sign and clear button
+onClick="reply_click(this)"
+onClick="reply_click(this)"
+onClick="reply_click(this)"
+onClick="reply_click(this)"
+onClick="reply_click(this)"
+onClick="reply_click(this)"
+onClick="reply_click(this)"
+onClick="reply_click(this)"
+onClick="reply_click(this)"
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Calculator </title>
+<style>
+    #display {
+    box-sizing: border-box;
+    width: 450px;
+    height: 100px;
+    border: 5px solid black;
+    display: flex;
+    font-size: 40px;
+    background-color: purple;
+    color: black;
+   }
+   #container {
+    width:450px;
+    height:420px;
+    border: 5px solid black;
+    padding: 5px 5px;
+    box-sizing: border-box;
+    background-color: black;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+   }
+   button {
+     width:100px;
+     height: 90px;
+     font-size: 40px;
+     color: black;
+     background-color: purple;
+     border-color: black;
+     
+     
+   }
+
+
+
+
+
+
+
+
+</style>
+</head>
+<body>
+
+  <div id="display" > </div>
+  <div id="container"> 
+    <button id="number1" type="button" value=1>1</button>
+    <button id="number2" type="button" data-value="2" value=2 >2</button>
+    <button id="number3" type="button" value=3 >3</button>
+    <button id="operator" type="button" value=+>+</button>
+    <button id="number4" type="button" value=4 >4 </button>
+    <button id="number5" type="button" value=5 >5</button>
+    <button id="number6" type="button" value=6 >6</button>
+    <button id="operator" type="button" value=->-</button>
+    <button id="number7" type="button" value=7 >7</button>
+    <button id="number8" type="button"value=8 >8</button>
+    <button id="number9" type="button"value=9 >9</button>
+    <button id="operator" type="button" value=*>*</button>
+    <button id="number0" type="button" value=0 >0  </button>
+    <button id="clear" type="button" value=c>C</button>
+    <button id="equals" type="button" value==>=</button>
+    <button id="operator" type="button" value=/>/</button>
+  </div>
+<script>
+    //need to find a way to call a function when an operator is clicked. issue is we only know 
+    //one number at that time.
+//document.querySelector(button).addEventListener("click",operate);
+//save the first number using button value or textcontent..
+//so when a number is clicked we need to store it in a var and then use it in a math function
+//how to store number? when clicked, num1=button.value. lets do that for each button, can change it later
+//we can do qselectorAll and put eventlistener for all butoons that returns the id or value of the button.
+//store the first value in a function called firstnumber that is called by eventlistener..
+//or any time a button is clicked its sent to a function that determines if its a number or operator then stores it
+//so what we can do is make a count=0 and increase it any time a number button is clicked(for now lets 
+//only worry about single digit numbers and two  different numbers)
+var count = 0;
+var num1=0;
+var num2=0;
+var operator;
+
+const buttons= document.querySelectorAll("button");
+buttons.forEach((button) => {
+  button.addEventListener("click", function() {buttonFunc(button.value);});
+});
+function buttonFunc (value) {
+if (value==="c") {
+    display.textContent="";
+    count=0;
+    
+  }
+else{
+  if (count ===0) {
+    value = Number(value);
+    num1=value;
+    console.log(num1);
+    //console.log((isNaN(num1)));
+    //console.log(typeof(num1));
+    count++;
+   display.textContent=num1;
+    return;
+  }
+  if (count===1) {
+    if (isNaN(Number(value))){
+    operator=value;
+    console.log(operator);
+    display.textContent=operator;
+    count++;
+    }
+    else {
+    num1=(num1*10)+(Number(value));
+    display.textContent = num1;
+    }
+    return;
+  }
+  if (count===2) {
+
+    value = Number(value);
+    num2 = value;
+    console.log(num2);
+    //console.log(isNaN(num2));
+    //console.log(typeof(num2));
+    display.textContent=num2;
+    count++;
+    
+    return;
+  }
+  if (count===3) {
+    if (isNaN(Number(value))) {
+      if (operator==="+"){
+        result = add(num1,num2);
+      }
+      if (operator==="-"){
+        result = subtract(num1,num2);
+      }
+      if (operator==="*"){
+        result = multiply(num1,num2);
+      }
+      if (operator==="/"){
+        result = divide(num1,num2);
+      }
+    console.log(result);
+    display.textContent=num1.toString()+" "+operator+" "+num2.toString()+""+value+" "+result;
+    count=0;
+  }
+    
+    else {
+      num2=(num2*10)+(Number(value));
+      display.textContent=num2;
+    }
+    
+    return;
+  }
+}
+  }
+
+
+
+  
+
+//function reply_click(clicked_object)
+//{
+ //    var num=clicked_object.getAttribute('value');
+ //    console.log(num);
+     
+//}
+function getBtnId(btn) {
+btn.addEventListener('click', function() {
+ 	alert(this.id + "\n" + this.dataset.mydata);
+ });
+}
+
+function firstnumber() {
+  
+}
+function operate(operator,num1,num2){
+
+
+}
+function add (num1, num2) {
+ return num1+num2;
+
+}
+
+function subtract (num1, num2){
+  return num1-num2;
+
+}
+
+function multiply (num1, num2) {
+  return num1*num2;
+
+}
+
+function divide (num1, num2) {
+  return num1/num2;
+}
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
